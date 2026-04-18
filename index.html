@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FEED</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hud-bar">
+        <div class="hud-title">
+          <h1>FEED</h1>
+        </div>
+        <div class="hud-meta">
+          <span id="stage-label">阶段 1</span>
+          <span id="timer-label">05:00</span>
+        </div>
+      </header>
+
+      <main class="game-wrapper">
+        <canvas id="game-canvas" width="1920" height="1080" aria-label="FEED 游戏画布"></canvas>
+        <div class="canvas-overlay">
+          <button id="synthesize-button" type="button">合成广告</button>
+          <div id="message-box">拖拽素材开始构建广告</div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
