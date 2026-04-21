@@ -42,30 +42,49 @@ export function buildLayout(config, state) {
 
   const materialCards = [...formatCards, ...hobbyCards, ...emotionCards];
 
-  const synthesisStartX = 930;
-  const synthesisY = 640;
+  const synthesisStartX = 1100;
+  const synthesisStartY = 590;
   const synthesisSlots = [
     {
       slotType: "format",
-      rect: { x: synthesisStartX, y: synthesisY, width: cardSize, height: cardSize },
+      rect: { x: synthesisStartX, y: synthesisStartY, width: cardSize, height: cardSize },
     },
     {
       slotType: "hobby",
-      rect: { x: synthesisStartX + (cardSize + gap), y: synthesisY, width: cardSize, height: cardSize },
+      rect: { x: synthesisStartX, y: synthesisStartY + cardSize + gap, width: cardSize, height: cardSize },
     },
     {
       slotType: "emotion",
-      rect: { x: synthesisStartX + (cardSize + gap) * 2, y: synthesisY, width: cardSize, height: cardSize },
+      rect: { x: synthesisStartX, y: synthesisStartY + (cardSize + gap) * 2, width: cardSize, height: cardSize },
     },
   ];
+
+  const pendingBoxX = synthesisStartX + cardSize + 30;
+  const pendingBoxY = 555;
+  const pendingBoxW = 600;
+  const pendingBoxH = 520;
+
+  const synthesizeButtonRect = {
+    x: pendingBoxX + 20,
+    y: pendingBoxY + pendingBoxH - 60,
+    width: pendingBoxW - 40,
+    height: 45,
+  };
+
+  const adAreaX = pendingBoxX + 20;
+  const adAreaY = pendingBoxY + 50;
+  const adW = 260;
+  const adH = 90;
+  const adGapX = 20;
+  const adGapY = 15;
 
   const adCards = state.pendingAds.map((item, index) => ({
     item,
     rect: {
-      x: 930 + (index % 2) * 260,
-      y: 820 + Math.floor(index / 2) * 120,
-      width: 220,
-      height: 90,
+      x: adAreaX + (index % 2) * (adW + adGapX),
+      y: adAreaY + Math.floor(index / 2) * (adH + adGapY),
+      width: adW,
+      height: adH,
     },
   }));
 
@@ -87,5 +106,7 @@ export function buildLayout(config, state) {
     synthesisSlots,
     adCards,
     phoneTargets,
+    pendingBox: { x: pendingBoxX, y: pendingBoxY, width: pendingBoxW, height: pendingBoxH },
+    synthesizeButtonRect,
   };
 }

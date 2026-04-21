@@ -2,10 +2,11 @@ import { GAME_CONFIG } from "../config.js";
 import { syncStageState } from "../systems/phaseSystem.js";
 import { updateNpcTimers, isVictory } from "../systems/npcSystem.js";
 
-export function createGameLoop(state, renderFrame) {
+export function createGameLoop(getState, renderFrame) {
   let previousTime = performance.now();
 
   function frame(now) {
+    const state = getState();
     const deltaTime = Math.min((now - previousTime) / 1000, 0.05);
     previousTime = now;
 
@@ -29,6 +30,6 @@ export function createGameLoop(state, renderFrame) {
     requestAnimationFrame(frame);
   }
 
-  state.timeLeft = GAME_CONFIG.totalTime;
+  getState().timeLeft = GAME_CONFIG.totalTime;
   requestAnimationFrame(frame);
 }

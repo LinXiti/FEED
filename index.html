@@ -7,6 +7,35 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <!-- 开始界面 -->
+    <div id="start-screen" class="screen-overlay">
+      <div class="screen-card">
+        <h1 class="screen-title">FEED</h1>
+        <p class="screen-subtitle">信息茧房模拟实验</p>
+        <div class="screen-intro">
+          <p>你是一名广告投放员。你的任务是向三位用户精准投放广告，让他们的<strong>信息茧房</strong>达到 100%。</p>
+          <ul>
+            <li>将素材拖入合成槽，点击「合成广告」生成广告</li>
+            <li>将广告拖到对应 NPC 的手机上完成投放</li>
+            <li>广告必须匹配 NPC 当前的需求才能生效</li>
+            <li>游戏分三个阶段，逐步解锁爱好与情感素材</li>
+            <li>在时间耗尽前让所有人的茧房填满即可通关</li>
+          </ul>
+        </div>
+        <button id="start-button" class="primary-button" type="button">开始实验</button>
+      </div>
+    </div>
+
+    <!-- 结束界面 -->
+    <div id="end-screen" class="screen-overlay hidden">
+      <div class="screen-card">
+        <div id="end-icon" class="end-icon"></div>
+        <h2 id="end-title" class="screen-title"></h2>
+        <p id="end-message" class="screen-subtitle"></p>
+        <button id="restart-button" class="primary-button" type="button">重新开始</button>
+      </div>
+    </div>
+
     <div class="app-shell">
       <header class="hud-bar">
         <div class="hud-title">
@@ -21,7 +50,6 @@
       <main class="game-wrapper">
         <canvas id="game-canvas" width="1920" height="1080" aria-label="FEED 游戏画布"></canvas>
         <div class="canvas-overlay">
-          <button id="synthesize-button" type="button">合成广告</button>
           <div id="message-box">拖拽素材开始构建广告</div>
         </div>
       </main>

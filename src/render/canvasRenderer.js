@@ -83,7 +83,8 @@ function drawMaterials(ctx, layout, state) {
 }
 
 function drawSynthesis(ctx, layout, state) {
-  drawText(ctx, "合成区", 930, 590, { font: "34px sans-serif" });
+  const firstSlot = layout.synthesisSlots[0].rect;
+  drawText(ctx, "合成区", firstSlot.x, firstSlot.y - 22, { font: "34px sans-serif" });
 
   for (const slot of layout.synthesisSlots) {
     const unlocked =
@@ -102,8 +103,9 @@ function drawSynthesis(ctx, layout, state) {
       unlocked ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.06)"
     );
 
+    const slotLabels = { format: "形式", hobby: "爱好", emotion: "情感" };
     const item = state.synthesisSlots[slot.slotType];
-    const label = item ? item.label : unlocked ? `${slot.slotType} 槽位` : "未解锁";
+    const label = item ? item.label : unlocked ? slotLabels[slot.slotType] : "未解锁";
     drawText(ctx, label, slot.rect.x + slot.rect.width / 2, slot.rect.y + slot.rect.height / 2, {
       font: "24px sans-serif",
       align: "center",
@@ -111,16 +113,33 @@ function drawSynthesis(ctx, layout, state) {
     });
   }
 
-  drawText(ctx, "待投放广告", 930, 790, { font: "30px sans-serif" });
+  // Pending ads box
+  const pb = layout.pendingBox;
+  drawRoundedRect(ctx, pb.x, pb.y, pb.width, pb.height, 20, "rgba(255,255,255,0.04)", "rgba(255,255,255,0.12)");
+  drawText(ctx, "待投放广告", pb.x + pb.width / 2, pb.y + 32, { font: "28px sans-serif", align: "center" });
+
   const draggingAdId = state.dragging?.kind === "ad" ? state.dragging.payload.id : null;
   for (const ad of layout.adCards) {
     if (ad.item.id === draggingAdId) continue;
-
-    drawRoundedRect(ctx, ad.rect.x, ad.rect.y, ad.rect.width, ad.rect.height, 18, "rgba(255,255,255,0.9)");
-    drawText(ctx, ad.item.format ?? "-", ad.rect.x + 20, ad.rect.y + 34, { font: "22px sans-serif", color: "#222" });
-    drawText(ctx, ad.item.hobby ?? "-", ad.rect.x + 20, ad.rect.y + 60, { font: "20px sans-serif", color: "#444" });
-    drawText(ctx, ad.item.emotion ?? "-", ad.rect.x + 120, ad.rect.y + 60, { font: "20px sans-serif", color: "#444" });
+    drawRoundedRect(ctx, ad.rect.x, ad.rect.y, ad.rect.width, ad.rect.height, 14, "rgba(255,255,255,0.9)");
+    drawText(ctx, ad.item.format ?? "-", ad.rect.x + 16, ad.rect.y + 34, { font: "22px sans-serif", color: "#222" });
+    drawText(ctx, ad.item.hobby ?? "-", ad.rect.x + 16, ad.rect.y + 62, { font: "19px sans-serif", color: "#444" });
+    drawText(ctx, ad.item.emotion ?? "-", ad.rect.x + 140, ad.rect.y + 62, { font: "19px sans-serif", color: "#444" });
   }
+
+  // Synthesize button
+  const btn = layout.synthesizeButtonRect;
+  drawRoundedRect(ctx, btn.x, btn.y, btn.width, btn.height, 12,
+    "linear-gradient(180deg, rgba(255,214,109,0.28), rgba(243,164,59,0.2))",
+    "rgba(255,255,255,0.18)"
+  );
+  // canvas doesn't support CSS gradients in fillStyle — use a solid approximation
+  drawRoundedRect(ctx, btn.x, btn.y, btn.width, btn.height, 12, "rgba(243,190,80,0.22)", "rgba(255,255,255,0.22)");
+  drawText(ctx, "合成广告", btn.x + btn.width / 2, btn.y + btn.height / 2, {
+    font: "bold 22px sans-serif",
+    align: "center",
+    baseline: "middle",
+  });
 }
 
 function drawDraggingPreview(ctx, dragging) {
