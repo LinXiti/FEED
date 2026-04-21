@@ -23,7 +23,17 @@ function drawText(ctx, text, x, y, options = {}) {
   ctx.fillStyle = options.color ?? "#f3f6ff";
   ctx.font = options.font ?? "28px sans-serif";
   ctx.textAlign = options.align ?? "left";
-  ctx.fillText(text, x, y);
+  ctx.textBaseline = options.baseline ?? "alphabetic";
+
+  const lines = String(text).split("\n");
+  const fontSizeMatch = /(\d+(?:\.\d+)?)px/.exec(ctx.font);
+  const defaultLineHeight = fontSizeMatch ? Number(fontSizeMatch[1]) * 1.2 : 32;
+  const lineHeight = options.lineHeight ?? defaultLineHeight;
+
+  lines.forEach((line, index) => {
+    ctx.fillText(line, x, y + index * lineHeight);
+  });
+
   ctx.restore();
 }
 
@@ -37,11 +47,16 @@ function drawNpcPanel(ctx, npc, index, layout, state) {
   drawRoundedRect(ctx, x, y, width, height, 24, "rgba(255,255,255,0.05)", "rgba(255,255,255,0.12)");
   drawRoundedRect(ctx, phone.x, phone.y, phone.width, phone.height, 28, "rgba(255,255,255,0.08)", "rgba(255,215,120,0.35)");
 
+  const isCompleted = npc.cocoonProgress >= GAME_CONFIG.maxProgress;
+  const formatDemand = isCompleted ? "已完成" : (npc.demand.format ?? "等待中...");
+  const hobbyDemand = state.stage >= 2 ? (isCompleted ? "已完成" : (npc.demand.hobby ?? "等待中...")) : "???";
+  const emotionDemand = state.stage >= 3 ? (isCompleted ? "已完成" : (npc.demand.emotion ?? "等待中...")) : "???";
+
   drawText(ctx, npc.avatar, phone.x + 120, y + 90, { font: "72px sans-serif", align: "center" });
   drawText(ctx, npc.name, phone.x + 120, y + 140, { font: "28px sans-serif", align: "center" });
-  drawText(ctx, `需求形式：${npc.demand.format}`, x + 290, y + 120, { font: "26px sans-serif" });
-  drawText(ctx, `需求爱好：${state.stage >= 2 ? npc.demand.hobby : "???"}`, x + 290, y + 170, { font: "24px sans-serif" });
-  drawText(ctx, `需求情感：${state.stage >= 3 ? npc.demand.emotion : "???"}`, x + 290, y + 220, { font: "24px sans-serif" });
+  drawText(ctx, `需求形式：${formatDemand}`, x + 290, y + 120, { font: "26px sans-serif" });
+  drawText(ctx, `需求爱好：${hobbyDemand}`, x + 290, y + 170, { font: "24px sans-serif" });
+  drawText(ctx, `需求情感：${emotionDemand}`, x + 290, y + 220, { font: "24px sans-serif" });
 
   const timerPercent = Math.max(0, npc.countdown / GAME_CONFIG.npcDemandLifetime);
   drawRoundedRect(ctx, x + width - 80, y + 80, 18, 220, 9, "rgba(255,255,255,0.12)");
@@ -56,8 +71,12 @@ function drawMaterials(ctx, layout, state) {
 
   for (const card of layout.materialCards) {
     drawRoundedRect(ctx, card.rect.x, card.rect.y, card.rect.width, card.rect.height, 20, "#ffffff", "rgba(0,0,0,0.08)");
-    drawText(ctx, card.item.icon, card.rect.x + 40, card.rect.y + 62, { font: "36px sans-serif", color: "#222" });
-    drawText(ctx, card.item.label, card.rect.x + 90, card.rect.y + 60, { font: "28px sans-serif", color: "#222" });
+    drawText(ctx, card.item.label, card.rect.x + card.rect.width / 2, card.rect.y + card.rect.height / 2, {
+      font: "28px sans-serif",
+      color: "#222",
+      align: "center",
+      baseline: "middle",
+    });
   }
 
   drawText(ctx, `当前阶段：${state.stage}`, 50, 1030, { font: "24px sans-serif", color: "rgba(243,246,255,0.7)" });
@@ -84,12 +103,19 @@ function drawSynthesis(ctx, layout, state) {
     );
 
     const item = state.synthesisSlots[slot.slotType];
-    const label = item ? `${item.icon} ${item.label}` : unlocked ? `${slot.slotType} 槽位` : "未解锁";
-    drawText(ctx, label, slot.rect.x + 24, slot.rect.y + 58, { font: "26px sans-serif" });
+    const label = item ? item.label : unlocked ? `${slot.slotType} 槽位` : "未解锁";
+    drawText(ctx, label, slot.rect.x + slot.rect.width / 2, slot.rect.y + slot.rect.height / 2, {
+      font: "24px sans-serif",
+      align: "center",
+      baseline: "middle",
+    });
   }
 
   drawText(ctx, "待投放广告", 930, 790, { font: "30px sans-serif" });
+  const draggingAdId = state.dragging?.kind === "ad" ? state.dragging.payload.id : null;
   for (const ad of layout.adCards) {
+    if (ad.item.id === draggingAdId) continue;
+
     drawRoundedRect(ctx, ad.rect.x, ad.rect.y, ad.rect.width, ad.rect.height, 18, "rgba(255,255,255,0.9)");
     drawText(ctx, ad.item.format ?? "-", ad.rect.x + 20, ad.rect.y + 34, { font: "22px sans-serif", color: "#222" });
     drawText(ctx, ad.item.hobby ?? "-", ad.rect.x + 20, ad.rect.y + 60, { font: "20px sans-serif", color: "#444" });
@@ -100,11 +126,21 @@ function drawSynthesis(ctx, layout, state) {
 function drawDraggingPreview(ctx, dragging) {
   if (!dragging) return;
 
-  drawRoundedRect(ctx, dragging.x - 90, dragging.y - 42, 180, 84, 18, "rgba(255,255,255,0.82)");
-  const label = dragging.kind === "material"
-    ? `${dragging.payload.icon} ${dragging.payload.label}`
+  const isMaterial = dragging.kind === "material";
+  const size = 120;
+  const width = isMaterial ? size : 180;
+  const height = isMaterial ? size : 84;
+
+  drawRoundedRect(ctx, dragging.x - width / 2, dragging.y - height / 2, width, height, 18, "rgba(255,255,255,0.82)");
+  const label = isMaterial
+    ? dragging.payload.label
     : `${dragging.payload.format}/${dragging.payload.hobby ?? "-"}/${dragging.payload.emotion ?? "-"}`;
-  drawText(ctx, label, dragging.x, dragging.y + 8, { font: "22px sans-serif", color: "#222", align: "center" });
+  drawText(ctx, label, dragging.x, dragging.y, {
+    font: "22px sans-serif",
+    color: "#222",
+    align: "center",
+    baseline: "middle",
+  });
 }
 
 export function renderGame(ctx, state, layout) {

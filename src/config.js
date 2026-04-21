@@ -24,12 +24,12 @@ export const MATERIAL_LIBRARY = {
     { id: "email", type: "format", label: "邮件", icon: "📧" },
   ],
   hobbies: [
-    { id: "sports", type: "hobby", label: "运动", icon: "⚽" },
-    { id: "food", type: "hobby", label: "美食", icon: "🍔" },
-    { id: "tech", type: "hobby", label: "科技", icon: "💻" },
-    { id: "fashion", type: "hobby", label: "时尚", icon: "👗" },
+    { id: "digital", type: "hobby", label: "数码", icon: "📱" },
     { id: "game", type: "hobby", label: "游戏", icon: "🎮" },
-    { id: "music", type: "hobby", label: "音乐", icon: "🎵" },
+    { id: "beauty", type: "hobby", label: "美妆", icon: "💄" },
+    { id: "pet", type: "hobby", label: "宠物", icon: "🐾" },
+    { id: "movie", type: "hobby", label: "电影", icon: "🎬" },
+    { id: "art", type: "hobby", label: "艺术", icon: "🎨" },
   ],
   emotions: [
     { id: "excited", type: "emotion", label: "兴奋", icon: "😆" },

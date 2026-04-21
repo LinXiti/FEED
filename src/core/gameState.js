@@ -15,17 +15,20 @@ function createNpcState(template, stage) {
     ...template,
     cocoonProgress: 0,
     countdown: GAME_CONFIG.npcDemandLifetime,
+    demandCooldown: 0,
     demand: createDemandForStage(template, stage),
   };
 }
 
 export function createInitialGameState() {
   const stage = 1;
+  const unlockedFeatures = ["第一阶段：投放形式"];
 
   return {
     stage,
     timeLeft: GAME_CONFIG.totalTime,
-    phaseBanner: "第一阶段：投放形式",
+    phaseBanner: unlockedFeatures.join("\n"),
+    unlockedFeatures,
     message: "把素材拖进合成槽，生成广告后投放给对应 NPC。",
     npcs: NPC_TEMPLATES.map((template) => createNpcState(template, stage)),
     availableMaterials: {
@@ -49,4 +52,5 @@ export function createInitialGameState() {
 export function refreshNpcDemand(npc, stage) {
   npc.demand = createDemandForStage(npc, stage);
   npc.countdown = GAME_CONFIG.npcDemandLifetime;
+  npc.demandCooldown = 0;
 }

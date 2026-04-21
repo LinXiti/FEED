@@ -18,7 +18,7 @@ function isInsideRect(point, rect) {
   );
 }
 
-export function createDragSystem({ canvas, state, layout, onMaterialDropped, onAdDropped }) {
+export function createDragSystem({ canvas, state, layout, onMaterialDropped, onAdDropped, onAdRemoved }) {
   canvas.addEventListener("pointerdown", (event) => {
     const point = resolveCanvasPoint(canvas, event);
 
@@ -52,6 +52,16 @@ export function createDragSystem({ canvas, state, layout, onMaterialDropped, onA
     const point = resolveCanvasPoint(canvas, event);
     state.dragging.x = point.x;
     state.dragging.y = point.y;
+  });
+
+  canvas.addEventListener("contextmenu", (event) => {
+    const point = resolveCanvasPoint(canvas, event);
+    const ad = layout.adCards.find((card) => isInsideRect(point, card.rect));
+    if (!ad) return;
+
+    event.preventDefault();
+    onAdRemoved?.(ad.item.id);
+    state.dragging = null;
   });
 
   canvas.addEventListener("pointerup", (event) => {

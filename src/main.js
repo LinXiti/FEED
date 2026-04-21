@@ -55,6 +55,12 @@ createDragSystem({
   onAdDropped: (adId, npcId) => {
     deliverAdToNpc(state, adId, npcId);
   },
+  onAdRemoved: (adId) => {
+    const adIndex = state.pendingAds.findIndex((ad) => ad.id === adId);
+    if (adIndex === -1) return;
+    state.pendingAds.splice(adIndex, 1);
+    state.message = "广告已删除。";
+  },
 });
 
 synthesizeButton.addEventListener("click", () => {

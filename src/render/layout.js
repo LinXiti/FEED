@@ -2,45 +2,60 @@ export function buildLayout(config, state) {
   const npcWidth = config.width / 3;
   const npcTop = 100;
   const npcHeight = 440;
-  const materials = [
-    ...state.availableMaterials.formats,
-    ...state.availableMaterials.hobbies,
-    ...state.availableMaterials.emotions,
-  ];
 
-  const materialCards = materials.map((item, index) => {
-    const columns = state.stage === 1 ? 2 : 3;
-    const cardWidth = 180;
-    const cardHeight = 100;
-    const gap = 20;
-    const startX = 40;
-    const startY = 620;
-    const col = index % columns;
-    const row = Math.floor(index / columns);
+  const cardSize = 120;
+  const gap = 20;
+  const startX = 40;
+  const startY = 620;
 
-    return {
-      item,
-      rect: {
-        x: startX + col * (cardWidth + gap),
-        y: startY + row * (cardHeight + gap),
-        width: cardWidth,
-        height: cardHeight,
-      },
-    };
-  });
+  const formatCards = state.availableMaterials.formats.map((item, index) => ({
+    item,
+    rect: {
+      x: startX + index * (cardSize + gap),
+      y: startY,
+      width: cardSize,
+      height: cardSize,
+    },
+  }));
 
+  const hobbyRowY = startY + cardSize + gap;
+  const hobbyCards = state.availableMaterials.hobbies.map((item, index) => ({
+    item,
+    rect: {
+      x: startX + index * (cardSize + gap),
+      y: hobbyRowY,
+      width: cardSize,
+      height: cardSize,
+    },
+  }));
+
+  const emotionRowY = hobbyRowY + cardSize + gap;
+  const emotionCards = state.availableMaterials.emotions.map((item, index) => ({
+    item,
+    rect: {
+      x: startX + index * (cardSize + gap),
+      y: emotionRowY,
+      width: cardSize,
+      height: cardSize,
+    },
+  }));
+
+  const materialCards = [...formatCards, ...hobbyCards, ...emotionCards];
+
+  const synthesisStartX = 930;
+  const synthesisY = 640;
   const synthesisSlots = [
     {
       slotType: "format",
-      rect: { x: 930, y: 640, width: 220, height: 100 },
+      rect: { x: synthesisStartX, y: synthesisY, width: cardSize, height: cardSize },
     },
     {
       slotType: "hobby",
-      rect: { x: 1170, y: 640, width: 220, height: 100 },
+      rect: { x: synthesisStartX + (cardSize + gap), y: synthesisY, width: cardSize, height: cardSize },
     },
     {
       slotType: "emotion",
-      rect: { x: 1410, y: 640, width: 220, height: 100 },
+      rect: { x: synthesisStartX + (cardSize + gap) * 2, y: synthesisY, width: cardSize, height: cardSize },
     },
   ];
 

@@ -1,3 +1,4 @@
+import { GAME_CONFIG } from "../config.js";
 import { applyDeliverySuccess } from "./npcSystem.js";
 
 export function isAdMatchingStage(ad, npc, stage) {
@@ -14,6 +15,11 @@ export function deliverAdToNpc(state, adId, npcId) {
 
   if (adIndex === -1 || !npc) {
     state.message = "投放目标无效。";
+    return false;
+  }
+
+  if (npc.cocoonProgress >= GAME_CONFIG.maxProgress) {
+    state.message = `${npc.name} 已完成，无需继续投喂。`;
     return false;
   }
 
