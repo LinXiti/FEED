@@ -5,7 +5,7 @@ export function buildLayout(config, state) {
 
   const cardSize = 120;
   const gap = 20;
-  const startX = 40;
+  const startX = 100;
   const startY = 620;
 
   const formatCards = state.availableMaterials.formats.map((item, index) => ({
@@ -42,8 +42,8 @@ export function buildLayout(config, state) {
 
   const materialCards = [...formatCards, ...hobbyCards, ...emotionCards];
 
-  const synthesisStartX = 1100;
-  const synthesisStartY = 590;
+  const synthesisStartX = 1050;
+  const synthesisStartY = 650;
   const synthesisSlots = [
     {
       slotType: "format",
@@ -60,21 +60,21 @@ export function buildLayout(config, state) {
   ];
 
   const pendingBoxX = synthesisStartX + cardSize + 30;
-  const pendingBoxY = 555;
+  const pendingBoxY = 550;
   const pendingBoxW = 600;
-  const pendingBoxH = 520;
+  const pendingBoxH = 380;
 
   const synthesizeButtonRect = {
-    x: pendingBoxX + 20,
+    x: pendingBoxX + 60,
     y: pendingBoxY + pendingBoxH - 60,
-    width: pendingBoxW - 40,
-    height: 45,
+    width: pendingBoxW - 100,
+    height: 100,
   };
 
   const adAreaX = pendingBoxX + 20;
-  const adAreaY = pendingBoxY + 50;
-  const adW = 260;
-  const adH = 90;
+  const adAreaY = pendingBoxY + 100;
+  const adW = 300;
+  const adH = 120;
   const adGapX = 20;
   const adGapY = 15;
 
@@ -91,10 +91,10 @@ export function buildLayout(config, state) {
   const phoneTargets = state.npcs.map((npc, index) => ({
     npcId: npc.id,
     rect: {
-      x: index * npcWidth + 50,
-      y: 160,
-      width: 240,
-      height: 320,
+      x: index * npcWidth + 120,
+      y: -50,      // leave ~200px above for bubble
+      width: 48*7,  // 48*4
+      height: 80*7, // 80*4
     },
   }));
 

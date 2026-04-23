@@ -42,7 +42,12 @@ export function createInitialGameState() {
       emotion: null,
     },
     pendingAds: [],
+    score: 0,
     dragging: null,
+    ui: {
+      synthesizeHovered: false,
+      synthesizePressed: false,
+    },
     hoveredTarget: null,
     gameOver: false,
     victory: false,

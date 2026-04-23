@@ -3,6 +3,7 @@ import { createInitialGameState } from "./core/gameState.js";
 import { createGameLoop } from "./core/gameLoop.js";
 import { buildLayout } from "./render/layout.js";
 import { renderGame } from "./render/canvasRenderer.js";
+import { loadUiAssets } from "./render/uiAssets.js";
 import { createDragSystem } from "./systems/dragSystem.js";
 import { synthesizeAd } from "./systems/synthesisSystem.js";
 import { deliverAdToNpc } from "./systems/deliverySystem.js";
@@ -12,6 +13,7 @@ const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 const stageLabel = document.getElementById("stage-label");
 const timerLabel = document.getElementById("timer-label");
+const scoreLabel = document.getElementById("score-label");
 const messageBox = document.getElementById("message-box");
 const startScreen = document.getElementById("start-screen");
 const endScreen = document.getElementById("end-screen");
@@ -29,10 +31,38 @@ let layout = buildLayout(GAME_CONFIG, state);
 let dragSystem = null;
 let loopStarted = false;
 let endShown = false;
+let uiAssets = null;
+
+function warmupUnifont() {
+  const fontFaceSet = document.fonts;
+  if (!fontFaceSet?.load) return Promise.resolve();
+  return fontFaceSet.load('16px "Unifont"').catch(() => {});
+}
+
+function resolveCanvasPoint(event) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+
+  return {
+    x: (event.clientX - rect.left) * scaleX,
+    y: (event.clientY - rect.top) * scaleY,
+  };
+}
+
+function isInsideRect(point, rect) {
+  return (
+    point.x >= rect.x &&
+    point.x <= rect.x + rect.width &&
+    point.y >= rect.y &&
+    point.y <= rect.y + rect.height
+  );
+}
 
 function updateHud() {
   stageLabel.textContent = `阶段 ${state.stage}`;
   timerLabel.textContent = formatSeconds(state.timeLeft);
+  scoreLabel.textContent = `算力积分 ${Number(state.score) || 0}`;
   messageBox.textContent = state.message;
 }
 
@@ -99,8 +129,8 @@ function startGame() {
         layout.synthesisSlots = nextLayout.synthesisSlots;
         layout.adCards = nextLayout.adCards;
         layout.phoneTargets = nextLayout.phoneTargets;
-        renderGame(ctx, state, layout);
         updateHud();
+        renderGame(ctx, state, layout, uiAssets);
 
         if (state.gameOver && !endShown) {
           endShown = true;
@@ -111,20 +141,86 @@ function startGame() {
   }
 
   updateHud();
-  renderGame(ctx, state, layout);
+  renderGame(ctx, state, layout, uiAssets);
 }
 
 canvas.addEventListener("click", (event) => {
-  const rect = canvas.getBoundingClientRect();
-  const x = (event.clientX - rect.left) * (canvas.width / rect.width);
-  const y = (event.clientY - rect.top) * (canvas.height / rect.height);
+  const point = resolveCanvasPoint(event);
   const btn = layout.synthesizeButtonRect;
-  if (btn && x >= btn.x && x <= btn.x + btn.width && y >= btn.y && y <= btn.y + btn.height) {
+  if (btn && isInsideRect(point, btn)) {
     synthesizeAd(state);
   }
 });
+
+canvas.addEventListener("pointermove", (event) => {
+  if (!layout?.synthesizeButtonRect) return;
+  if (state.dragging) {
+    state.ui.synthesizeHovered = false;
+    canvas.style.cursor = "default";
+    return;
+  }
+  const point = resolveCanvasPoint(event);
+  const hovered = isInsideRect(point, layout.synthesizeButtonRect);
+  state.ui.synthesizeHovered = hovered;
+  canvas.style.cursor = hovered ? "pointer" : "default";
+});
+
+canvas.addEventListener("pointerdown", (event) => {
+  if (!layout?.synthesizeButtonRect || state.dragging) return;
+  const point = resolveCanvasPoint(event);
+  state.ui.synthesizePressed = isInsideRect(point, layout.synthesizeButtonRect);
+});
+
+function clearSynthesizePointerState() {
+  state.ui.synthesizeHovered = false;
+  state.ui.synthesizePressed = false;
+  canvas.style.cursor = "default";
+}
+
+canvas.addEventListener("pointerup", () => {
+  state.ui.synthesizePressed = false;
+});
+canvas.addEventListener("pointerleave", clearSynthesizePointerState);
+canvas.addEventListener("pointercancel", clearSynthesizePointerState);
+
 startButton.addEventListener("click", startGame);
 restartButton.addEventListener("click", startGame);
 
 updateHud();
 renderGame(ctx, state, layout);
+
+warmupUnifont().then(() => {
+  renderGame(ctx, state, layout, uiAssets);
+});
+
+loadUiAssets().then((assets) => {
+  uiAssets = assets;
+
+  function applyArtButton(el, imgSet) {
+    const img = imgSet?.normal;
+    if (!img) return;
+    el.classList.add("art-button");
+    el.style.setProperty("--btn-art-normal", `url("${img.src}")`);
+    el.style.setProperty("--btn-art-hover", `url("${(imgSet.hover ?? img).src}")`);
+    el.style.setProperty("--btn-art-active", `url("${(imgSet.active ?? img).src}")`);
+    el.style.setProperty("--btn-art-width", `${img.naturalWidth * 4}px`);
+    el.style.setProperty("--btn-art-height", `${img.naturalHeight * 4}px`);
+  }
+
+  applyArtButton(startButton, assets.dom.start);
+  applyArtButton(restartButton, assets.dom.restart);
+
+  // apply background to start/end screens
+  const bg = assets.dom.screenBg;
+  if (bg) {
+    const bgUrl = `url("${bg.src}")`;
+    [startScreen, endScreen].forEach((el) => {
+      el.style.backgroundImage = bgUrl;
+      el.style.backgroundSize = "cover";
+      el.style.backgroundPosition = "center";
+      el.style.imageRendering = "pixelated";
+    });
+  }
+
+  renderGame(ctx, state, layout, uiAssets);
+});

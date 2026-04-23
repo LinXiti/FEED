@@ -16,8 +16,11 @@ export function synthesizeAd(state) {
 
   const ad = {
     id: crypto.randomUUID(),
+    formatId: state.synthesisSlots.format?.id ?? null,
     format: state.synthesisSlots.format?.label ?? null,
+    hobbyId: state.synthesisSlots.hobby?.id ?? null,
     hobby: state.synthesisSlots.hobby?.label ?? null,
+    emotionId: state.synthesisSlots.emotion?.id ?? null,
     emotion: state.synthesisSlots.emotion?.label ?? null,
   };
 

@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FEED</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./style.css?v=5" />
+    <link rel="preload" href="./unifont-16.0.04.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
   </head>
   <body>
     <!-- 开始界面 -->
@@ -40,8 +41,10 @@
       <header class="hud-bar">
         <div class="hud-title">
           <h1>FEED</h1>
+          <span id="score-label">算力积分 0</span>
         </div>
         <div class="hud-meta">
+          <div id="message-box">拖拽素材开始构建广告</div>
           <span id="stage-label">阶段 1</span>
           <span id="timer-label">05:00</span>
         </div>
@@ -49,12 +52,9 @@
 
       <main class="game-wrapper">
         <canvas id="game-canvas" width="1920" height="1080" aria-label="FEED 游戏画布"></canvas>
-        <div class="canvas-overlay">
-          <div id="message-box">拖拽素材开始构建广告</div>
-        </div>
       </main>
     </div>
 
-    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/main.js?v=5"></script>
   </body>
 </html>

@@ -8,10 +8,29 @@ export const GAME_CONFIG = {
     phase3: 120,
   },
   npcDemandLifetime: 20,
+  // NPC 顶部「需求气泡」的尺寸配置（canvasRenderer.js 会读取这里）
+  demandBubble: {
+    iconSize: 64,
+    iconPad: 16,
+    iconGap: 12,
+    iconOffsetX: -3,
+    iconOffsetY: -8,
+    // 气泡相对 phone 的 Y 偏移（越大越往下）
+    yOffset: 180,
+  },
+  synthesis: {
+    slotIconScale: 0.85,
+    slotIconTopPad: 8,
+  },
   progressGain: {
     1: 4,
     2: 6,
     3: 9,
+  },
+  deliveryScoreGain: {
+    1: 10,
+    2: 30,
+    3: 60,
   },
   maxProgress: 100,
 };

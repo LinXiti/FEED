@@ -34,7 +34,9 @@ export function updateNpcTimers(state, deltaTime) {
 
 export function applyDeliverySuccess(state, npc) {
   const gain = GAME_CONFIG.progressGain[state.stage];
+  const scoreGain = GAME_CONFIG.deliveryScoreGain?.[state.stage] ?? 0;
   npc.cocoonProgress = clamp(npc.cocoonProgress + gain, 0, GAME_CONFIG.maxProgress);
+  state.score = (Number(state.score) || 0) + scoreGain;
   npc.demand = {
     format: null,
     hobby: null,
@@ -42,7 +44,7 @@ export function applyDeliverySuccess(state, npc) {
   };
   npc.countdown = 0;
   npc.demandCooldown = npc.cocoonProgress >= GAME_CONFIG.maxProgress ? 0 : Math.random() * 10;
-  state.message = `${npc.name} 接收成功，信息茧房 +${gain}%`;
+  state.message = `${npc.name} 接收成功，信息茧房 +${gain}%，算力积分 +${scoreGain}`;
 }
 
 export function isVictory(state) {
