@@ -51,11 +51,11 @@ export const MATERIAL_LIBRARY = {
     { id: "art", type: "hobby", label: "艺术", icon: "🎨" },
   ],
   emotions: [
-    { id: "excited", type: "emotion", label: "兴奋", icon: "😆" },
-    { id: "calm", type: "emotion", label: "平静", icon: "😌" },
-    { id: "anxious", type: "emotion", label: "焦虑", icon: "😰" },
-    { id: "joyful", type: "emotion", label: "愉悦", icon: "😊" },
-    { id: "angry", type: "emotion", label: "愤怒", icon: "😠" },
-    { id: "curious", type: "emotion", label: "好奇", icon: "🤔" },
+    { id: "anger", type: "emotion", label: "愤怒", icon: "😠" },
+    { id: "anticipation", type: "emotion", label: "期待", icon: "⏳" },
+    { id: "happiness", type: "emotion", label: "快乐", icon: "😊" },
+    { id: "sadness", type: "emotion", label: "悲伤", icon: "😢" },
+    { id: "surprise", type: "emotion", label: "惊讶", icon: "😲" },
+    { id: "trust", type: "emotion", label: "信任", icon: "🤝" },
   ],
 };

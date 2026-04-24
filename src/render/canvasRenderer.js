@@ -26,8 +26,6 @@ function drawText(ctx, text, x, y, options = {}) {
 const ICON_KEY = {
   video: "video", image: "photo", text: "word", email: "email",
   digital: "digital", game: "game", beauty: "beauty", pet: "pet", movie: "movie", art: "art",
-  excited: "happiness", calm: "trust", anxious: "anticipation",
-  joyful: "happiness", angry: "anger", curious: "anticipation",
   anger: "anger", anticipation: "anticipation", happiness: "happiness",
   sadness: "sadness", surprise: "surprise", trust: "trust",
 };
@@ -109,8 +107,8 @@ function drawNpcPanel(ctx, npc, index, layout, state, uiAssets) {
     const LABEL_TO_ID = {
       "视频": "video", "图片": "image", "文字": "text", "邮件": "email",
       "数码": "digital", "游戏": "game", "美妆": "beauty", "宠物": "pet", "电影": "movie", "艺术": "art",
-      "兴奋": "excited", "平静": "calm", "焦虑": "anxious",
-      "愉悦": "joyful", "愤怒": "angry", "好奇": "curious",
+      "愤怒": "anger", "期待": "anticipation", "快乐": "happiness",
+      "悲伤": "sadness", "惊讶": "surprise", "信任": "trust",
     };
     if (npc.demand.format) demandIds.push(LABEL_TO_ID[npc.demand.format] ?? npc.demand.format);
     if (state.stage >= 2 && npc.demand.hobby) demandIds.push(LABEL_TO_ID[npc.demand.hobby] ?? npc.demand.hobby);
