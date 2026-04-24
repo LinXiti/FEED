@@ -22,14 +22,14 @@ function createNpcState(template, stage) {
 
 export function createInitialGameState() {
   const stage = 1;
-  const unlockedFeatures = ["第一阶段：投放形式"];
+  const unlockedFeatures = ["Stage 1: Ad Formats"];
 
   return {
     stage,
     timeLeft: GAME_CONFIG.totalTime,
     phaseBanner: unlockedFeatures.join("\n"),
     unlockedFeatures,
-    message: "把素材拖进合成槽，生成广告后投放给对应 NPC。",
+    message: "Drag and drop assets to create ads",
     npcs: NPC_TEMPLATES.map((template) => createNpcState(template, stage)),
     availableMaterials: {
       formats: [...MATERIAL_LIBRARY.formats],

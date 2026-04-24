@@ -1,3 +1,5 @@
+import { audioManager } from "../audio/audioManager.js";
+
 function resolveCanvasPoint(canvas, event) {
   const rect = canvas.getBoundingClientRect();
   const scaleX = canvas.width / rect.width;
@@ -25,6 +27,7 @@ export function createDragSystem({ canvas, state, layout, onMaterialDropped, onA
     for (const material of layout.materialCards) {
       if (isInsideRect(point, material.rect)) {
         state.dragging = { kind: "material", payload: material.item, x: point.x, y: point.y };
+        audioManager.playSfx("grab");
         return;
       }
     }
@@ -32,6 +35,7 @@ export function createDragSystem({ canvas, state, layout, onMaterialDropped, onA
     for (const ad of layout.adCards) {
       if (isInsideRect(point, ad.rect)) {
         state.dragging = { kind: "ad", payload: ad.item, x: point.x, y: point.y };
+        audioManager.playSfx("grab");
         return;
       }
     }
@@ -50,6 +54,7 @@ export function createDragSystem({ canvas, state, layout, onMaterialDropped, onA
     if (!ad) return;
     event.preventDefault();
     onAdRemoved?.(ad.item.id);
+    audioManager.playSfx("clear");
     state.dragging = null;
   }
 

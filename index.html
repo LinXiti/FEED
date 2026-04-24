@@ -6,24 +6,24 @@
     <title>FEED</title>
     <link rel="stylesheet" href="./style.css?v=5" />
     <link rel="preload" href="./unifont-16.0.04.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/audio/bgm2.wav" as="audio" type="audio/wav" />
   </head>
   <body>
     <!-- 开始界面 -->
     <div id="start-screen" class="screen-overlay">
       <div class="screen-card">
-        <h1 class="screen-title">FEED</h1>
-        <p class="screen-subtitle">信息茧房模拟实验</p>
+        <h1 class="screen-title">[ SYSTEM ACCESS GRANTED ]</h1>
+        <p class="screen-subtitle">You are a high-performance Recommendation AI. Your sole objective is to capture total user attention and construct closed-loop Information Cocoons through hyper-targeted advertising.</p>
         <div class="screen-intro">
-          <p>你是一名广告投放员。你的任务是向三位用户精准投放广告，让他们的<strong>信息茧房</strong>达到 100%。</p>
+          <p>Maximize your Computing Power Points.</p>
           <ul>
-            <li>将素材拖入合成槽，点击「合成广告」生成广告</li>
-            <li>将广告拖到对应 NPC 的手机上完成投放</li>
-            <li>广告必须匹配 NPC 当前的需求才能生效</li>
-            <li>游戏分三个阶段，逐步解锁爱好与情感素材</li>
-            <li>在时间耗尽前让所有人的茧房填满即可通关</li>
+            <li><strong>CREATE:</strong> Drag data modules into slots and click [Create Ad] to create advertisements.</li>
+            <li><strong>MATCH:</strong> Drag advertisements onto targets' phones to complete delivery. You will progressively unlock the dimensions of Format, Topic, and Sentiment.</li>
+            <li><strong>CAPTURE:</strong> Ensure the Cocoon Rate of all targets reaches 100% before time expires.</li>
           </ul>
+          <p><strong>CONTROLS：</strong><br />LMB: Drag<br />RMB: Delete</p>
         </div>
-        <button id="start-button" class="primary-button" type="button">开始实验</button>
+        <button id="start-button" class="primary-button" type="button">开始</button>
       </div>
     </div>
 
@@ -41,11 +41,11 @@
       <header class="hud-bar">
         <div class="hud-title">
           <h1>FEED</h1>
-          <span id="score-label">算力积分 0</span>
+          <span id="score-label">computing score: 0</span>
         </div>
         <div class="hud-meta">
-          <div id="message-box">拖拽素材开始构建广告</div>
-          <span id="stage-label">阶段 1</span>
+          <div id="message-box">drag and drop assets to create ads</div>
+          <span id="stage-label">stage 1</span>
           <span id="timer-label">05:00</span>
         </div>
       </header>

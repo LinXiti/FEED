@@ -1,3 +1,4 @@
+import { audioManager } from "../audio/audioManager.js";
 import { GAME_CONFIG } from "../config.js";
 import { applyDeliverySuccess } from "./npcSystem.js";
 
@@ -14,23 +15,27 @@ export function deliverAdToNpc(state, adId, npcId) {
   const npc = state.npcs.find((item) => item.id === npcId);
 
   if (adIndex === -1 || !npc) {
-    state.message = "投放目标无效。";
+    state.message = "The targeting is invalid.";
+    audioManager.playSfx("matchFail");
     return false;
   }
 
   if (npc.cocoonProgress >= GAME_CONFIG.maxProgress) {
-    state.message = `${npc.name} 已完成，无需继续投喂。`;
+    state.message = `${npc.name} has been completed, no need to continue feeding.`;
+    audioManager.playSfx("matchFail");
     return false;
   }
 
   const ad = state.pendingAds[adIndex];
 
   if (!isAdMatchingStage(ad, npc, state.stage)) {
-    state.message = "广告不匹配，该广告已退回待投放区。";
+    state.message = "The ad does not match the NPC's demand. ";
+    audioManager.playSfx("matchFail");
     return false;
   }
 
   state.pendingAds.splice(adIndex, 1);
   applyDeliverySuccess(state, npc);
+  audioManager.playSfx("matchSuccess");
   return true;
 }

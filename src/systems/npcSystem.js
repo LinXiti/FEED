@@ -1,3 +1,4 @@
+import { audioManager } from "../audio/audioManager.js";
 import { GAME_CONFIG } from "../config.js";
 import { clamp } from "../utils/helpers.js";
 import { refreshNpcDemand } from "../core/gameState.js";
@@ -19,6 +20,7 @@ export function updateNpcTimers(state, deltaTime) {
       npc.demandCooldown = Math.max(0, npc.demandCooldown - deltaTime);
       if (npc.demandCooldown === 0) {
         refreshNpcDemand(npc, state.stage);
+        audioManager.playSfx("popupBill");
       }
       continue;
     }
@@ -27,7 +29,8 @@ export function updateNpcTimers(state, deltaTime) {
 
     if (npc.countdown <= 0) {
       refreshNpcDemand(npc, state.stage);
-      state.message = `${npc.name} 划走了广告，需求已刷新。`;
+      state.message = `${npc.name} The ad has been swiped away; the request has been refreshed.`;
+      audioManager.playSfx("popupBill");
     }
   }
 }
@@ -44,7 +47,11 @@ export function applyDeliverySuccess(state, npc) {
   };
   npc.countdown = 0;
   npc.demandCooldown = npc.cocoonProgress >= GAME_CONFIG.maxProgress ? 0 : Math.random() * 10;
-  state.message = `${npc.name} 接收成功，信息茧房 +${gain}%，算力积分 +${scoreGain}`;
+  state.message = `${npc.name} received the ad successfully, information cocoon +${gain}%, computing score +${scoreGain}`;
+
+  if (npc.cocoonProgress >= GAME_CONFIG.maxProgress) {
+    audioManager.playSfx("npcComplete");
+  }
 }
 
 export function isVictory(state) {

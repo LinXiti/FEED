@@ -1,3 +1,5 @@
+import { audioManager } from "../audio/audioManager.js";
+
 const REQUIRED_TYPES = {
   1: ["format"],
   2: ["format", "hobby"],
@@ -10,7 +12,8 @@ export function canSynthesize(state) {
 
 export function synthesizeAd(state) {
   if (!canSynthesize(state)) {
-    state.message = "缺少必要素材，无法合成。";
+    state.message = "Missing required assets, cannot synthesize ad.";
+    audioManager.playSfx("matchFail");
     return null;
   }
 
@@ -30,6 +33,6 @@ export function synthesizeAd(state) {
     hobby: null,
     emotion: null,
   };
-  state.message = "广告合成成功，拖拽到 NPC 手机区域进行投放。";
+  state.message = "Ad synthesized successfully, drag and drop to the NPC's phone area to deploy.";
   return ad;
 }

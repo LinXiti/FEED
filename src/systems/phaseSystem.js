@@ -2,9 +2,9 @@ import { GAME_CONFIG, MATERIAL_LIBRARY } from "../config.js";
 import { refreshNpcDemand } from "../core/gameState.js";
 
 const STAGE_FEATURE_LABELS = {
-  1: "第一阶段：投放形式",
-  2: "第二阶段：追加爱好定向",
-  3: "第三阶段：操控情感烈度",
+  1: "Phase 1: Ad Formats",
+  2: "Phase 2: Additional Hobby Targeting",
+  3: "Phase 3: Emotional Intensity Control",
 };
 
 export function getStageByTime(timeLeft) {
@@ -41,6 +41,6 @@ export function syncStageState(state) {
   state.unlockedFeatures.push(newFeature);
   state.phaseBanner = state.unlockedFeatures.join("\n");
 
-  state.message = `进入${newFeature}`;
+  state.message = `Entering ${newFeature}`;
   return true;
 }

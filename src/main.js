@@ -1,3 +1,4 @@
+import { audioManager } from "./audio/audioManager.js";
 import { GAME_CONFIG } from "./config.js";
 import { createInitialGameState } from "./core/gameState.js";
 import { createGameLoop } from "./core/gameLoop.js";
@@ -60,43 +61,52 @@ function isInsideRect(point, rect) {
 }
 
 function updateHud() {
-  stageLabel.textContent = `阶段 ${state.stage}`;
+  stageLabel.textContent = `stage ${state.stage}`;
   timerLabel.textContent = formatSeconds(state.timeLeft);
-  scoreLabel.textContent = `算力积分 ${Number(state.score) || 0}`;
+  scoreLabel.textContent = `computing score: ${Number(state.score) || 0}`;
   messageBox.textContent = state.message;
 }
 
 function assignMaterialToSlot(material, slotType) {
   if (material.type !== slotType) {
-    state.message = `该素材不能放入 ${slotType} 槽位。`;
+    state.message = `The asset cannot be placed in the ${slotType} slot.`;
+    audioManager.playSfx("matchFail");
     return;
   }
   if (slotType === "hobby" && state.stage < 2) {
-    state.message = "第二阶段才会解锁爱好槽位。";
+    state.message = "The hobby slot will be unlocked in the second stage.";
+    audioManager.playSfx("matchFail");
     return;
   }
   if (slotType === "emotion" && state.stage < 3) {
-    state.message = "第三阶段才会解锁情感槽位。";
+    state.message = "The emotion slot will be unlocked in the third stage.";
+    audioManager.playSfx("matchFail");
     return;
   }
   state.synthesisSlots[slotType] = material;
-  state.message = `${material.label} 已放入 ${slotType} 槽位。`;
+  state.message = `${material.label} has been placed in the ${slotType} slot.`;
+  audioManager.playSfx("slotIn");
 }
 
 function showEndScreen(victory) {
   if (victory) {
     endIcon.textContent = "🎯";
-    endTitle.textContent = "实验成功";
-    endMessage.textContent = "所有用户的信息茧房已填满，目标受众完全被算法包围。";
+    endTitle.textContent = "MISSION ACCOMPLISHED";
+    endMessage.textContent = "Information Cocoons established.\nTargets are fully immersed. They are consuming more, more, and more...";
+    audioManager.playSfx("matchSuccess");
   } else {
     endIcon.textContent = "⏱️";
-    endTitle.textContent = "实验失败";
-    endMessage.textContent = "时间耗尽，仍有用户未被完全覆盖。信息茧房尚未成型。";
+    endTitle.textContent = "MISSION FAILED";
+    endMessage.textContent = "Due to deviant user behavior, this model is deemed critically defective.\nComputing Power withdrawn. Formatting system...";
+    audioManager.playSfx("matchFail");
   }
   endScreen.classList.remove("hidden");
 }
 
 function startGame() {
+  audioManager.unlock();
+  audioManager.ensureBgmPlaying();
+
   startScreen.classList.add("hidden");
   endScreen.classList.add("hidden");
   endShown = false;
@@ -115,7 +125,7 @@ function startGame() {
       const adIndex = state.pendingAds.findIndex((ad) => ad.id === adId);
       if (adIndex === -1) return;
       state.pendingAds.splice(adIndex, 1);
-      state.message = "广告已删除。";
+      state.message = "The ad has been deleted.";
     },
   });
 
@@ -148,6 +158,7 @@ canvas.addEventListener("click", (event) => {
   const point = resolveCanvasPoint(event);
   const btn = layout.synthesizeButtonRect;
   if (btn && isInsideRect(point, btn)) {
+    audioManager.playSfx("grab");
     synthesizeAd(state);
   }
 });
@@ -188,6 +199,7 @@ restartButton.addEventListener("click", startGame);
 
 updateHud();
 renderGame(ctx, state, layout);
+audioManager.preloadAll();
 
 warmupUnifont().then(() => {
   renderGame(ctx, state, layout, uiAssets);

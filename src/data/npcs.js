@@ -1,7 +1,7 @@
 export const NPC_TEMPLATES = [
   {
     id: 0,
-    name: "小美",
+    name: "Emily",
     avatar: "😀",
     acceptableFormats: ["视频", "图片"],
     hobbies: ["数码", "游戏", "美妆"],
@@ -9,7 +9,7 @@ export const NPC_TEMPLATES = [
   },
   {
     id: 1,
-    name: "阿杰",
+    name: "Oleg",
     avatar: "😎",
     acceptableFormats: ["文字", "邮件"],
     hobbies: ["宠物", "电影", "艺术"],
@@ -17,7 +17,7 @@ export const NPC_TEMPLATES = [
   },
   {
     id: 2,
-    name: "小琳",
+    name: "Elijah",
     avatar: "🙂",
     acceptableFormats: ["图片", "邮件"],
     hobbies: ["数码", "电影", "艺术"],
