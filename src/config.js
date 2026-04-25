@@ -16,7 +16,9 @@ export const GAME_CONFIG = {
     iconOffsetX: -3,
     iconOffsetY: -8,
     // 气泡相对 phone 的 Y 偏移（越大越往下）
-    yOffset: 180,
+    // NOTE: phoneTargets 目前会略微抬到画布上沿之外（见 layout.js），
+    // yOffset 太小会导致气泡/进度条顶边被 canvas 裁剪。
+    yOffset: 220,
   },
   synthesis: {
     slotIconScale: 0.85,

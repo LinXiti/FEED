@@ -130,7 +130,8 @@ function drawNpcPanel(ctx, npc, index, layout, state, uiAssets) {
 
   // position bubble centred above phone, with a small gap
   const bubbleX = phone.x + (phone.width - bubbleW) / 2;
-  const bubbleY = phone.y - bubbleH + 200;
+  const bubbleYOffset = GAME_CONFIG.demandBubble?.yOffset ?? 200;
+  const bubbleY = Math.max(0, phone.y - bubbleH + bubbleYOffset);
 
   // countdown timer bar — fixed container attached to bubble left side;
   // inner fill shrinks vertically from bottom to top
