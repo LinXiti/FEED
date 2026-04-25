@@ -57,7 +57,8 @@ body {
 
 #score-label {
   min-width: 160px;
-  font-size: 18px;
+  font-size: 24px;
+  font-weight: 700;
   line-height: 1;
   color: rgba(243, 246, 255, 0.88);
   white-space: nowrap;
@@ -216,10 +217,35 @@ body {
   color: rgba(243, 246, 255, 0.7);
 }
 
+.highlight-format,
+.highlight-hobby,
+.highlight-intensity {
+  font-weight: 700;
+  text-shadow: 0 0 10px currentColor, 0 0 18px currentColor;
+}
+
+.highlight-format {
+  color: #69b7ff;
+}
+
+.highlight-hobby {
+  color: #78e08f;
+}
+
+.highlight-intensity {
+  color: #ffb347;
+}
+
 .end-icon {
   font-size: 56px;
   margin-bottom: 16px;
   line-height: 1;
+}
+
+.end-meta {
+  margin-top: -12px;
+  margin-bottom: 28px;
+  color: rgba(243, 246, 255, 0.82);
 }
 
 .primary-button {

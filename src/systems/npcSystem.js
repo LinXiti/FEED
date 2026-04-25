@@ -29,7 +29,7 @@ export function updateNpcTimers(state, deltaTime) {
 
     if (npc.countdown <= 0) {
       refreshNpcDemand(npc, state.stage);
-      state.message = `${npc.name} The ad has been swiped away; the request has been refreshed.`;
+      state.message = `${npc.name} The ad has been swiped away.`;
       audioManager.playSfx("popupBill");
     }
   }
@@ -47,7 +47,7 @@ export function applyDeliverySuccess(state, npc) {
   };
   npc.countdown = 0;
   npc.demandCooldown = npc.cocoonProgress >= GAME_CONFIG.maxProgress ? 0 : Math.random() * 10;
-  state.message = `${npc.name} received the ad successfully, information cocoon +${gain}%, computing score +${scoreGain}`;
+  state.message = `${npc.name} information cocoon +${gain}%, computing power points +${scoreGain}`;
 
   if (npc.cocoonProgress >= GAME_CONFIG.maxProgress) {
     audioManager.playSfx("npcComplete");

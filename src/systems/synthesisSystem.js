@@ -33,6 +33,6 @@ export function synthesizeAd(state) {
     hobby: null,
     emotion: null,
   };
-  state.message = "Ad synthesized successfully, drag and drop to the NPC's phone area to deploy.";
+  state.message = "Ad synthesized successfully.";
   return ad;
 }

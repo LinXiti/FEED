@@ -16,7 +16,7 @@
 - `btn_restart_hover.png`（可选）
 - `btn_restart_active.png`（可选）
 
-JS 会在图片加载成功后，自动给对应按钮加上 `art-button` 类，并用素材作为背景图。
+JS 会在image加载成功后，自动给对应按钮加上 `art-button` 类，并用素材作为背景图。
 
 ## Canvas “合成广告”按钮素材命名（放到本目录）
 
@@ -24,5 +24,5 @@ JS 会在图片加载成功后，自动给对应按钮加上 `art-button` 类，
 - `btn_synthesize_hover.png`（可选）
 - `btn_synthesize_active.png`（可选）
 
-渲染时会优先绘制素材；若素材缺失或加载失败，会自动回退到原来的圆角+文字按钮。
+渲染时会优先绘制素材；若素材缺失或加载失败，会自动回退到原来的圆角+text按钮。
 

@@ -105,10 +105,10 @@ function drawNpcPanel(ctx, npc, index, layout, state, uiAssets) {
   if (!isCompleted) {
     // map label → material id for icon lookup
     const LABEL_TO_ID = {
-      "视频": "video", "图片": "image", "文字": "text", "邮件": "email",
-      "数码": "digital", "游戏": "game", "美妆": "beauty", "宠物": "pet", "电影": "movie", "艺术": "art",
-      "愤怒": "anger", "期待": "anticipation", "快乐": "happiness",
-      "悲伤": "sadness", "惊讶": "surprise", "信任": "trust",
+      "video": "video", "image": "image", "text": "text", "email": "email",
+      "digital": "digital", "game": "game", "makeup": "beauty", "pet": "pet", "movie": "movie", "art": "art",
+      "angry": "anger", "anticipate": "anticipation", "happy": "happiness",
+      "sad": "sadness", "astonish": "surprise", "trust": "trust",
     };
     if (npc.demand.format) demandIds.push(LABEL_TO_ID[npc.demand.format] ?? npc.demand.format);
     if (state.stage >= 2 && npc.demand.hobby) demandIds.push(LABEL_TO_ID[npc.demand.hobby] ?? npc.demand.hobby);
@@ -174,8 +174,8 @@ function drawNpcPanel(ctx, npc, index, layout, state, uiAssets) {
   } else {
     demandIds.forEach((id, i) => {
       const icon = getIcon(uiAssets, id);
-      const ix = bubbleX + iconPad + i * (iconSize + iconGap);
-      const iy = bubbleY + iconPad;
+      const ix = bubbleX + iconPad + i * (iconSize + iconGap)-2;
+      const iy = bubbleY + iconPad-5;
       if (icon) {
         drawPixel(ctx, icon, ix, iy, iconSize, iconSize);
       }
@@ -189,24 +189,12 @@ function drawMaterials(ctx, layout, state, uiAssets) {
   for (const card of layout.materialCards) {
     const { x, y, width, height } = card.rect;
     const icon = getIcon(uiAssets, card.item.id);
-    const iconPad = 16;
+    const iconPad = 6;
     const iconSize = width - iconPad * 2;
-
-    // card background — use slot image as card bg, fallback to plain rect
-    const slotBg = uiAssets?.canvas?.slots?.[0] ?? null;
-    if (slotBg) {
-      drawPixel(ctx, slotBg, x, y, width, height);
-    } else {
-      ctx.save();
-      ctx.fillStyle = "rgba(255,255,255,0.12)";
-      ctx.fillRect(x, y, width, height);
-      ctx.restore();
-    }
 
     if (icon) {
       drawPixel(ctx, icon, x + iconPad, y + iconPad, iconSize, iconSize);
     }
-
   }
 }
 
@@ -218,7 +206,7 @@ function drawSynthesis(ctx, layout, state, uiAssets) {
   const pb = layout.pendingBox;
   // slot area covers synthesis slots + pending box
   const areaX = layout.synthesisSlots[0].rect.x - 20;
-  const areaY = layout.synthesisSlots[0].rect.y - 20;
+  const areaY = layout.synthesisSlots[0].rect.y -8;
   const areaW = pb.x + pb.width - areaX + 20;
   const areaH = pb.height + 40;
   if (slotArea) {

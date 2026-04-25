@@ -27,6 +27,7 @@ export function createInitialGameState() {
   return {
     stage,
     timeLeft: GAME_CONFIG.totalTime,
+    finalTimeLeft: null,
     phaseBanner: unlockedFeatures.join("\n"),
     unlockedFeatures,
     message: "Drag and drop assets to create ads",

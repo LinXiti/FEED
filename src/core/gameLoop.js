@@ -20,6 +20,7 @@ export function createGameLoop(getState, renderFrame) {
       updateNpcTimers(state, deltaTime);
 
       if (isVictory(state)) {
+        state.finalTimeLeft = state.timeLeft;
         state.gameOver = true;
         state.victory = true;
         state.message = "All NPC information cocoons are filled.";

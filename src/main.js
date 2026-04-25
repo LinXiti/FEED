@@ -22,6 +22,7 @@ const startButton = document.getElementById("start-button");
 const restartButton = document.getElementById("restart-button");
 const endTitle = document.getElementById("end-title");
 const endMessage = document.getElementById("end-message");
+const endTimeRemaining = document.getElementById("end-time-remaining");
 const endIcon = document.getElementById("end-icon");
 
 canvas.width = GAME_CONFIG.width;
@@ -63,7 +64,7 @@ function isInsideRect(point, rect) {
 function updateHud() {
   stageLabel.textContent = `stage ${state.stage}`;
   timerLabel.textContent = formatSeconds(state.timeLeft);
-  scoreLabel.textContent = `computing score: ${Number(state.score) || 0}`;
+  scoreLabel.textContent = `computing power points: ${Number(state.score) || 0}`;
   messageBox.textContent = state.message;
 }
 
@@ -88,16 +89,23 @@ function assignMaterialToSlot(material, slotType) {
   audioManager.playSfx("slotIn");
 }
 
-function showEndScreen(victory) {
+function showEndScreen(victory, finalTimeLeft) {
   if (victory) {
+    const remainingSeconds = Math.max(0, Math.ceil(finalTimeLeft ?? 0));
+    const secondsLabel = remainingSeconds === 1 ? "second" : "seconds";
+
     endIcon.textContent = "🎯";
     endTitle.textContent = "MISSION ACCOMPLISHED";
     endMessage.textContent = "Information Cocoons established.\nTargets are fully immersed. They are consuming more, more, and more...";
+    endTimeRemaining.textContent = `${remainingSeconds} ${secondsLabel} remaining`;
+    endTimeRemaining.classList.remove("hidden");
     audioManager.playSfx("matchSuccess");
   } else {
     endIcon.textContent = "⏱️";
     endTitle.textContent = "MISSION FAILED";
     endMessage.textContent = "Due to deviant user behavior, this model is deemed critically defective.\nComputing Power withdrawn. Formatting system...";
+    endTimeRemaining.textContent = "";
+    endTimeRemaining.classList.add("hidden");
     audioManager.playSfx("matchFail");
   }
   endScreen.classList.remove("hidden");
@@ -144,7 +152,7 @@ function startGame() {
 
         if (state.gameOver && !endShown) {
           endShown = true;
-          setTimeout(() => showEndScreen(state.victory), 800);
+          setTimeout(() => showEndScreen(state.victory, state.finalTimeLeft), 800);
         }
       }
     );

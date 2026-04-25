@@ -43,19 +43,19 @@ export function buildLayout(config, state) {
   const materialCards = [...formatCards, ...hobbyCards, ...emotionCards];
 
   const synthesisStartX = 1050;
-  const synthesisStartY = 650;
+  const synthesisStartY = 620;
   const synthesisSlots = [
     {
       slotType: "format",
-      rect: { x: synthesisStartX, y: synthesisStartY, width: cardSize, height: cardSize },
+      rect: { x: synthesisStartX, y: synthesisStartY+10, width: cardSize, height: cardSize },
     },
     {
       slotType: "hobby",
-      rect: { x: synthesisStartX, y: synthesisStartY + cardSize + gap, width: cardSize, height: cardSize },
+      rect: { x: synthesisStartX, y: synthesisStartY + cardSize + gap+10, width: cardSize, height: cardSize },
     },
     {
       slotType: "emotion",
-      rect: { x: synthesisStartX, y: synthesisStartY + (cardSize + gap) * 2, width: cardSize, height: cardSize },
+      rect: { x: synthesisStartX, y: synthesisStartY + (cardSize + gap) * 2+10, width: cardSize, height: cardSize },
     },
   ];
 
